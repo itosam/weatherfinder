@@ -1,0 +1,111 @@
+@font-face {
+  font-family: "VarelaRound";
+  src: url(./fonts/) format("ttf"),
+    url(./fonts/VarelaRound-Regular.ttf) format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'VarelaRoud', sans-serif;
+    box-sizing: border-box
+}
+
+body{
+    background: white;
+}
+
+.card {
+    width: 90%;
+    max-width: 470px;
+    background: white;
+    border: solid black;
+    margin: 100px auto 0;
+    border-radius:20px;
+    padding: 40px 35px;;
+    text-align: center;
+}
+
+.search {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.search input {
+    border: 0;
+    outline: 0;
+    background: white;
+    color: black;
+    border: solid black;
+    padding: 10px 25px;
+    height: 60px;
+    border-radius: 30px;
+    flex: 1;
+    font-size: 18px;
+
+}
+
+.search button {
+    background: white;
+    border: white;
+
+}
+.search button img {
+    border: 0;
+    outline: 0;
+    background: white;
+    border-radius:50%;
+    cursor: pointer;
+    width: 80px;
+}
+
+.weather-icon {
+    width: 170px;
+    margin-top: 30px;
+}
+
+.weather h1 {
+    font-size: 80px;
+    font-weight: 500;
+}
+
+.weather h2 {
+    font-size: 45px;
+    font-weight: 400;
+    margin-top: -5px;
+}
+
+.details{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    margin-top: 50px;
+
+}
+
+.col {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    padding: 5%;
+}
+
+.col img {
+    width: 40px;
+    margin-right: 10px;
+}
+
+.toggle {
+    background: white;
+    border: none;
+}
+.toggle img {
+    width: 50px;
+    cursor: pointer;
+}
