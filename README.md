@@ -7,10 +7,15 @@ I want to display the weather of a city input in the search field.
 
 ## FUNCTIONALITY
 
-- When the button is clicked, we can search and display the weather forecast for the city entered
+- When the button is clicked or enter key is pressed, we can search and display the weather forecast for the city entered
 - display weather icon, temperature, city name, and humidity/ wind info.
-- darkmode toggling (stretch goal)
+
+
 
 ## RESULTS
 
-<a href=""><strong>Site Demo Here</strong></a>
+<a href="https://itosam.github.io/weatherfinder/"><strong>Site Demo Here</strong></a>
+
+## Stretch Goals currently working on
+- toggling between imperial and metric temperature display.
+- location tracking upon page load, to display user location weather info.
