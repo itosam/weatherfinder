@@ -1,111 +1,159 @@
 @font-face {
-  font-family: "VarelaRound";
+  font-family: "HelveticaNowDisplay-Black";
   src: url(./fonts/) format("ttf"),
-    url(./fonts/VarelaRound-Regular.ttf) format("ttf");
+    url(./fonts/HelveticaNowDisplay-Black.ttf) format("ttf");
   font-weight: normal;
   font-style: normal;
 }
 
-*{
+@font-face {
+  font-family: "HelveticaNowDisplay-BlackIta";
+  src: url(./fonts/) format("ttf"),
+    url(./fonts/HelveticaNowDisplay-BlackIto.ttf) format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "HelveticaNowDisplay-Bold";
+  src: url(./fonts/) format("ttf"),
+    url(./fonts/HelveticaNowDisplay-Bold.ttf) format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "HelveticaNowDisplay-Medium";
+  src: url(./fonts/) format("woff"),
+    url(./fonts/HelveticaNowDisplay-Bold.ttf) format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "HelveticaNowDisplay-Light";
+  src: url(./fonts/) format("woff"),
+    url(./fonts/HelveticaNowDisplay-Light.ttf) format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+*{  
+    
     margin: 0;
     padding: 0;
-    font-family: 'VarelaRoud', sans-serif;
-    box-sizing: border-box
+    font-family: 'HelveticaNowDisplay-Black', sans-serif;
+    font-weight: 500;
+    box-sizing: border-box;
 }
 
 body{
     background: white;
 }
 
+a{
+  color: black;
+}
+
+row {
+  display: flex;
+}
+
+column {
+  flex: 50%;
+}
+.home-link {
+    font-family: "HelveticaNowDisplay-Medium";
+    outline: none;   
+    font-weight: 500;
+    font-size: 32px;
+   text-decoration: none;
+}
+
+.suncloud-background {
+  background:#FDF2CD;
+}
+.rain-background {
+  background:#707070;
+}
+.weather-bg {
+    z-index: -3;
+    position: absolute; 
+  
+    margin-left: 30%;
+    width: 600px;
+}
 .card {
-    width: 90%;
-    max-width: 470px;
-    background: white;
-    border: solid black;
-    margin: 100px auto 0;
-    border-radius:20px;
-    padding: 40px 35px;;
-    text-align: center;
+max-width: 1080px;
+padding: 57px 57px 0 75px;
+}
+.toggle{
+    background: transparent;
+    border: none;
+    float: right;
+    cursor: pointer;
+}
+.toggle img {
+    width:30px;
 }
 
 .search {
-    width: 100%;
+    width:300px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    font-size: 100px;
+    padding-bottom: 36px;
 
 }
-
 .search input {
     border: 0;
     outline: 0;
-    background: white;
+    background: none;
     color: black;
-    border: solid black;
-    padding: 10px 25px;
-    height: 60px;
-    border-radius: 30px;
+    border-bottom: solid black;
     flex: 1;
-    font-size: 18px;
+    font-size: 100px;
+    margin-left: 10px;
+    margin-bottom: -1px;
+    width: 500px;
+    
+}
 
+::placeholder{
+    color:black;
+    opacity:1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: black;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: black;
 }
 
 .search button {
-    background: white;
-    border: white;
+    background-color: Transparent;
+    border-bottom: solid black;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+
 
 }
 .search button img {
-    border: 0;
-    outline: 0;
-    background: white;
-    border-radius:50%;
     cursor: pointer;
-    width: 80px;
+    width:80px;
+    margin-top: 33px;
 }
 
 .weather-icon {
-    width: 170px;
-    margin-top: 30px;
+    width: 120px;
 }
 
 .weather h1 {
-    font-size: 80px;
-    font-weight: 500;
-}
-
-.weather h2 {
-    font-size: 45px;
+    font-size: 100px;
     font-weight: 400;
-    margin-top: -5px;
 }
-
-.details{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 20px;
-    margin-top: 50px;
-
-}
-
-.col {
-    display: flex;
-    align-items: center;
-    text-align: left;
-    padding: 5%;
-}
-
-.col img {
-    width: 40px;
-    margin-right: 10px;
-}
-
-.toggle {
-    background: white;
-    border: none;
-}
-.toggle img {
-    width: 50px;
-    cursor: pointer;
+.details {
+  font-size: 48px;
+  font-weight: 400;
 }

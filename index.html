@@ -8,45 +8,48 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <img
+          class="weather-bg"
+          src="assets/weather/bgog.svg"
+          alt="weather-background"
+        />
     <div class="card">
-      <div class="search">
-        <input type="text" placeholder="enter city name" spellcheck="false" />
-        <button><img src="assets/search.png" /></button>
-      </div>
+      <row>
+        <column>
+      <p>
+        <a class="home-link" href="index.html">weather finder</a>
+      </p>
+    </column>
+    <column>
+    <button class = "toggle">
+          <img
+          src = "assets/toggle.png"
+          alt = "darkmode toggle"/>
+   </button>
+      </column>
+      </row>
       <div class="weather">
+        <row>
+        <h1 class="temp">It's weather°  </h1> 
         <img
           class="weather-icon"
-          src="assets/weather/weather.png"
+          src="assets/weather/cloud.svg"
           alt="weather-icon"
-        />
-        <h1 class="temp">° F</h1>
-        <h2 class="city"></h2> 
+        /></row>
+        
+        <div class="search">
+        in <input type="text" placeholder="enter city" spellcheck="false" />
+        <button><img src="assets/search.png" /></button>
+        </div>
         <div class="details">
-        <div class="col">
-          <img src="assets/weather/humid.png" />
-          <div>
-            <p class="humidity">--%</p>
-            <p>Humidity</p>
-          </div>
+          <p class="humidity">--% Humidity</p>
+         <p class="wind"> mph Wind Speed</p>
         </div>
-       
-          <div class="col">
-            <img src="assets/weather/wind.png" />
-            <div>
-              <p class="wind"> mph</p>
-              <p>Wind Speed</p>
-            </div>
-          </div>
-        </div>
-        <button class = "toggle">
-          <img
-          src = "assets/switch.png"
-          alt = "darkmode toggle"/>
-        </button>
       </div>
     </div>
- u   <script src="src/index.js"></script>
+  <script src="src/index.js"></script>
+  <!-- file not pushed to github for key protection -->
+  <script src="src/secret/keys.js"></script>
+    <!--/////////////////////////////////////////// -->
   </body>
-
 </html>
-`
