@@ -1,6 +1,6 @@
 # weather finder
 <br/>
-<img src="/home/ito/Development/code/personal-projects/weather/assets/weatherfinder.gif" width="600" alt= "weather finder app demo gif" />
+<img src="./assets/weatherfinder.gif" width="600" alt= "weather finder app demo gif" />
 <br/>
 <br/>
 <br/>
