@@ -16,7 +16,7 @@ I want to display the current weather of a city input in the search field.
 
 
 ## RESULTS
-- Created functional application using the <a href ="https://openweathermap.org/">OpenWeather API</a>, and can display current weather forecast with custom ui.
+- Created functional application using the <a href ="https://open-meteo.com/">Open-Meteo API</a>, and can display current weather forecast with custom ui.
 - Users can enter the city info using city name or zipcode, and press enter key or search icon.
 - Icon and background will change based on current weather info (sunny/cloudy/rainy/etc.)
 

@@ -21,10 +21,11 @@
       </p>
     </column>
     <column>
-    <button class = "toggle">
+    <button class = "toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
           <img
+          class="toggle-icon"
           src = "assets/toggle.png"
-          alt = "darkmode toggle"/>
+          alt = ""/>
    </button>
       </column>
       </row>
@@ -38,9 +39,10 @@
         /></row>
         
         <div class="search">
-        in <input type="text" placeholder="New York" spellcheck="false" />
-        <button><img src="assets/search.png" /></button>
+        in <input type="text" placeholder="New York" spellcheck="false" aria-label="City or ZIP code" />
+        <button type="button" aria-label="Search weather"><img class="search-icon" src="assets/search.png" alt="" /></button>
         </div>
+        <p class="status" role="status" aria-live="polite"></p>
         <div class="details">
           <p class="humidity">33% Humidity</p>
          <p class="wind"> 22mph Wind Speed</p>
@@ -48,8 +50,5 @@
       </div>
     </div>
   <script src="src/index.js"></script>
-  <!-- file not pushed to github for key protection -->
-  <script src="src/secret/keys.js"></script>
-    <!--/////////////////////////////////////////// -->
   </body>
 </html>
