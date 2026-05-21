@@ -20,13 +20,18 @@
         <a class="home-link" href="index.html">weather finder</a>
       </p>
     </column>
-    <column>
-    <button class = "toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+    <column class="toggle-column">
+    <div class="unit-toggle">
+    <button class = "toggle" type="button" aria-label="Switch to Celsius" aria-pressed="false">
           <img
           class="toggle-icon"
           src = "assets/toggle.png"
           alt = ""/>
    </button>
+   <div class="unit-label" aria-hidden="true">
+    <span class="unit-f">F</span>/<span class="unit-c">C</span>
+   </div>
+  </div>
       </column>
       </row>
       <div class="weather">
@@ -39,7 +44,8 @@
         /></row>
         
         <div class="search">
-        in <input type="text" placeholder="City, state, or ZIP" spellcheck="false" aria-label="City, state, or ZIP code" />
+        <span class="search-prefix">in</span>
+        <input type="text" placeholder="City, state, or ZIP" spellcheck="false" aria-label="City, state, or ZIP code" />
         <button type="button" aria-label="Search weather"><img class="search-icon" src="assets/search.png" alt="" /></button>
         </div>
         <p class="status" role="status" aria-live="polite"></p>

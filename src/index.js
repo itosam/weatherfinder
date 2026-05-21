@@ -4,15 +4,33 @@ const searchBtn = document.querySelector(".search button");
 const weatherIcon = document.querySelector(".weather-icon");
 const weatherBg = document.querySelector(".weather-bg");
 const toggle = document.querySelector(".toggle");
-const toggleIcon = document.querySelector(".toggle-icon");
 const tempText = document.querySelector(".temp");
 const humidityText = document.querySelector(".humidity");
 const windText = document.querySelector(".wind");
 const statusText = document.querySelector(".status");
 
 const defaultCity = "New York";
-const darkModeStorageKey = "weatherfinder-dark-mode";
+const unitStorageKey = "weatherfinder-unit";
+const unitOptions = {
+  imperial: {
+    temperatureUnit: "fahrenheit",
+    windSpeedUnit: "mph",
+    tempLabel: "F",
+    windLabel: "mph",
+    nextLabel: "Celsius",
+  },
+  metric: {
+    temperatureUnit: "celsius",
+    windSpeedUnit: "kmh",
+    tempLabel: "C",
+    windLabel: "kph",
+    nextLabel: "Fahrenheit",
+  },
+};
 let currentWeatherType = "cloudy";
+let currentUnit = localStorage.getItem(unitStorageKey) === "metric" ? "metric" : "imperial";
+let currentLocation = null;
+let currentQuery = defaultCity;
 
 const usStates = {
   al: "Alabama",
@@ -121,31 +139,26 @@ const weatherTypes = {
     icon: "assets/weather/sun.png",
     background: "suncloud-background",
     bgImage: "assets/weather/bgcloud.svg",
-    lightModeBgImage: "assets/weather/bgcloud.svg",
   },
   cloudy: {
     icon: "assets/weather/cloud.svg",
     background: "inclement-background",
-    bgImage: "assets/weather/bgcloud.svg",
-    lightModeBgImage: "assets/weather/bgog.svg",
+    bgImage: "assets/weather/bgog.svg",
   },
   rainy: {
     icon: "assets/weather/rain.png",
     background: "inclement-background",
-    bgImage: "assets/weather/bgcloud.svg",
-    lightModeBgImage: "assets/weather/bgog.svg",
+    bgImage: "assets/weather/bgog.svg",
   },
   snowy: {
     icon: "assets/weather/snowflake.png",
     background: "inclement-background",
-    bgImage: "assets/weather/bgcloud.svg",
-    lightModeBgImage: "assets/weather/bgog.svg",
+    bgImage: "assets/weather/bgog.svg",
   },
   stormy: {
     icon: "assets/weather/storm.png",
     background: "inclement-background",
-    bgImage: "assets/weather/bgcloud.svg",
-    lightModeBgImage: "assets/weather/bgog.svg",
+    bgImage: "assets/weather/bgog.svg",
   },
 };
 
@@ -165,23 +178,19 @@ function setStatus(message, isError = false) {
 
 function updateBackground(type) {
   currentWeatherType = type;
-  const isDarkMode = body.classList.contains("dark-mode");
 
   body.classList.remove("suncloud-background", "rain-background", "inclement-background");
   body.classList.add(weatherTypes[type].background);
   weatherIcon.src = weatherTypes[type].icon;
-  weatherBg.src = isDarkMode ? weatherTypes[type].bgImage : weatherTypes[type].lightModeBgImage;
+  weatherBg.src = weatherTypes[type].bgImage;
 }
 
-function setDarkMode(isDarkMode) {
-  body.classList.toggle("dark-mode", isDarkMode);
-  toggle.setAttribute("aria-pressed", String(isDarkMode));
-  toggle.setAttribute("aria-label", isDarkMode ? "Switch to light mode" : "Switch to dark mode");
-  toggleIcon.src = isDarkMode ? "assets/toggle2.png" : "assets/toggle.png";
-  weatherBg.src = isDarkMode
-    ? weatherTypes[currentWeatherType].bgImage
-    : weatherTypes[currentWeatherType].lightModeBgImage;
-  localStorage.setItem(darkModeStorageKey, String(isDarkMode));
+function setUnit(unit) {
+  currentUnit = unit;
+  body.classList.toggle("metric-units", unit === "metric");
+  toggle.setAttribute("aria-pressed", String(unit === "metric"));
+  toggle.setAttribute("aria-label", `Switch to ${unitOptions[unit].nextLabel}`);
+  localStorage.setItem(unitStorageKey, unit);
 }
 
 function normalizeText(value) {
@@ -285,6 +294,38 @@ async function getCityLocation(city, state) {
   return location;
 }
 
+async function getLocationName(latitude, longitude) {
+  const params = new URLSearchParams({
+    latitude,
+    longitude,
+    language: "en",
+    format: "json",
+  });
+  const resp = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?${params}`);
+
+  if (!resp.ok) {
+    return null;
+  }
+
+  const data = await resp.json();
+  return data.results && data.results[0] ? data.results[0] : null;
+}
+
+function getUserPosition() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("Location is not available in this browser."));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(resolve, reject, {
+      enableHighAccuracy: false,
+      maximumAge: 30 * 60 * 1000,
+      timeout: 8000,
+    });
+  });
+}
+
 async function getLocation(query) {
   const locationQuery = parseLocationQuery(query);
 
@@ -302,12 +343,13 @@ async function getLocation(query) {
 }
 
 async function getWeather(location) {
+  const selectedUnit = unitOptions[currentUnit];
   const params = new URLSearchParams({
     latitude: location.latitude,
     longitude: location.longitude,
     current: "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code",
-    temperature_unit: "fahrenheit",
-    wind_speed_unit: "mph",
+    temperature_unit: selectedUnit.temperatureUnit,
+    wind_speed_unit: selectedUnit.windSpeedUnit,
   });
   const resp = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
 
@@ -316,6 +358,37 @@ async function getWeather(location) {
   }
 
   return resp.json();
+}
+
+function displayWeather(location, current) {
+  const type = getWeatherType(current.weather_code);
+  const selectedUnit = unitOptions[currentUnit];
+
+  tempText.textContent = `It's ${Math.round(current.temperature_2m)}°`;
+  humidityText.textContent = `${current.relative_humidity_2m}% Humidity`;
+  windText.textContent = `${Math.round(current.wind_speed_10m)}${selectedUnit.windLabel} Wind Speed`;
+  searchInput.value = location.name;
+  setStatus(`${location.name}${location.admin1 ? `, ${location.admin1}` : ""}`);
+  updateBackground(type);
+}
+
+async function refreshCurrentWeather() {
+  if (!currentLocation) {
+    checkWeather(currentQuery);
+    return;
+  }
+
+  setStatus("Loading weather...");
+  searchBtn.disabled = true;
+
+  try {
+    const data = await getWeather(currentLocation);
+    displayWeather(currentLocation, data.current);
+  } catch (error) {
+    setStatus(error.message, true);
+  } finally {
+    searchBtn.disabled = false;
+  }
 }
 
 async function checkWeather(city = defaultCity) {
@@ -331,19 +404,41 @@ async function checkWeather(city = defaultCity) {
   searchBtn.disabled = true;
 
   try {
-    const location = await getLocation(query);
+    const location = currentLocation && query === currentQuery ? currentLocation : await getLocation(query);
     const data = await getWeather(location);
-    const current = data.current;
-    const type = getWeatherType(current.weather_code);
 
-    tempText.textContent = `It's ${Math.round(current.temperature_2m)}°`;
-    humidityText.textContent = `${current.relative_humidity_2m}% Humidity`;
-    windText.textContent = `${Math.round(current.wind_speed_10m)}mph Wind Speed`;
-    searchInput.value = location.name;
-    setStatus(`${location.name}${location.admin1 ? `, ${location.admin1}` : ""}`);
-    updateBackground(type);
+    currentLocation = location;
+    currentQuery = query;
+    displayWeather(location, data.current);
   } catch (error) {
     setStatus(error.message, true);
+  } finally {
+    searchBtn.disabled = false;
+  }
+}
+
+async function loadEstimatedLocationWeather() {
+  setStatus("Finding your area...");
+  searchBtn.disabled = true;
+
+  try {
+    const position = await getUserPosition();
+    const { latitude, longitude } = position.coords;
+    const locationName = await getLocationName(latitude, longitude);
+    const location = {
+      latitude,
+      longitude,
+      name: locationName ? locationName.name : "Your area",
+      admin1: locationName ? locationName.admin1 : "",
+    };
+    const data = await getWeather(location);
+
+    currentLocation = location;
+    currentQuery = location.name;
+    displayWeather(location, data.current);
+  } catch (error) {
+    setStatus("Using default location.");
+    checkWeather(defaultCity);
   } finally {
     searchBtn.disabled = false;
   }
@@ -360,8 +455,9 @@ searchInput.addEventListener("keydown", (e) => {
 });
 
 toggle.addEventListener("click", () => {
-  setDarkMode(!body.classList.contains("dark-mode"));
+  setUnit(currentUnit === "imperial" ? "metric" : "imperial");
+  refreshCurrentWeather();
 });
 
-setDarkMode(localStorage.getItem(darkModeStorageKey) === "true");
-checkWeather(defaultCity);
+setUnit(currentUnit);
+loadEstimatedLocationWeather();
